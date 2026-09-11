@@ -1,8 +1,7 @@
 {
-  "name": "tsdown-starter",
-  "version": "0.0.0",
-  "private": true,
-  "description": "A simple example library built by tsdown",
+  "name": "vue-extras",
+  "version": "0.0.1",
+  "description": "Custom reactivity utilities and extras for Vue 3",
   "files": [
     "dist"
   ],
