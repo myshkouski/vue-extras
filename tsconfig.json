@@ -1,6 +1,7 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {
+    "moduleResolution": "bundler",
     "target": "esnext",
     "lib": ["ESNext", "DOM"],
     "verbatimModuleSyntax": true
