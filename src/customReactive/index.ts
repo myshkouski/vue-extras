@@ -7,7 +7,7 @@ import {
   TriggerOpTypes,
 } from "@vue/reactivity";
 import { isArray, isFunction, isPromise } from "@vue/shared";
-import { isClient, isWorker, type AnyFn } from "@vueuse/core";
+import type { AnyFn } from "@vueuse/core";
 import { warn, onScopeDispose } from "vue";
 
 export function customReactive<T extends object, TProps extends PropType<T>>(
@@ -77,16 +77,15 @@ export function customReactive<T extends object, TProps extends PropType<T>>(
 
   const hooks = options?.hooks;
 
-  if (hooks && (isClient || isWorker)) {
+  if (hooks && isEventTarget(target)) {
     for (const [eventType, dep] of Object.entries(hooks)) {
       if (dep) {
-        const eventTarget = target as EventTarget;
         const cb = () => {
           triggerDependencies(target, dep);
         };
-        eventTarget.addEventListener(eventType, cb);
+        target.addEventListener(eventType, cb);
         onScopeDispose(() => {
-          eventTarget.removeEventListener(eventType, cb);
+          target.removeEventListener(eventType, cb);
         }, true);
       }
     }
@@ -213,3 +212,7 @@ export type CustomReactiveEffect<TProps extends PropType> = (
 export type CustomReactiveEffectOrProp<TProps extends PropType> =
   | CustomReactiveEffect<TProps>
   | TProps;
+
+function isEventTarget(value: any): value is EventTarget {
+  return isFunction(value?.addEventListener) && isFunction(value?.removeEventListener) && isFunction(value?.dispatchEvent)
+}
