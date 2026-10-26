@@ -42,8 +42,8 @@ describe("customReactive", async () => {
     };
 
     const reactive = customReactive(raw, {
-      // no need in reactivity for that test case
-      // track: ['prop']
+      // track should be non-empty to 
+      track: ['prop'],
     });
 
     expect(reactive.getProp()).toBe("own_prop");
