@@ -4,6 +4,8 @@
     "moduleResolution": "bundler",
     "target": "esnext",
     "lib": ["ESNext", "DOM"],
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "declaration": true,
+    "isolatedDeclarations": true
   }
 }
