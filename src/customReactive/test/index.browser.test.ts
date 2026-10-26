@@ -49,6 +49,28 @@ describe("customReactive", async () => {
     expect(reactive.getProp()).toBe("own_prop");
     expect(capturedThis).toStrictEqual(raw);
   });
+
+  it("deleting a tracked prop triggers a watcher", async () => {
+    const raw: { prop?: string } = { prop: "value" };
+    const reactive = customReactive(raw, { track: ["prop"] });
+
+    const { promise, resolve } = Promise.withResolvers<void>();
+
+    watch(
+      () => reactive.prop,
+      () => {
+        resolve();
+      },
+      {
+        flush: "post"
+      },
+    );
+
+    expect(reactive.prop).toBe("value");
+    delete reactive.prop;
+    await promise;
+    expect(reactive.prop).toBeUndefined();
+  });
 });
 
 function useAbort() {

@@ -31,6 +31,13 @@ export function customReactive<T extends object, TProps extends PropType<T>>(
       return has;
     };
 
+    proxyHandler.deleteProperty = (target, prop) => {
+      if (trackedProps.includes(prop as TProps)) {
+        trigger(target, TriggerOpTypes.DELETE, prop);
+      }
+      return Reflect.deleteProperty(target, prop);
+    };
+
     proxyHandler.get = (target, prop, receiver) => {
       switch (prop) {
         case ReactiveFlags.RAW:
